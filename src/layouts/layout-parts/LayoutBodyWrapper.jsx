@@ -1,6 +1,5 @@
 import { Box, styled } from "@mui/material";
 import { Fragment } from "react";
-import LayoutSetting from "./LayoutSetting"; // styled components
 
 const Wrapper = styled(Box)(({
   theme
@@ -34,7 +33,7 @@ const LayoutBodyWrapper = ({
         <InnerWrapper>{children}</InnerWrapper>
       </Wrapper>
 
-      <LayoutSetting />
+      {/* <LayoutSetting /> */}
     </Fragment>;
 };
 

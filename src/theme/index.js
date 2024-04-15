@@ -4,13 +4,14 @@ import { THEMES } from "../constants";
 import components from "./components";
 import { shadows } from "./shadows";
 import themesOptions from "./themeOptions";
-import {Avenir} from "../cutomfonts/FontsFree-Net-AvenirLTStd-Black.ttf"
+
+
+
 const baseOptions = {
   direction: "ltr",
   typography: {
-    // src: url(fonts/FontsFree-Net-AvenirLTStd-Black.ttf) format('truetype'),
-    // fontFamily: "'Avenir LTStd-Black'"
-  },
+    fontFamily: 'Montserrat, sans-serif', // Use the font-family name specified in the @font-face declaration
+},
   breakpoints: {
     values: {
       xs: 0,
