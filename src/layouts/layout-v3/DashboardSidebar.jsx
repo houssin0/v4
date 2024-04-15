@@ -66,7 +66,7 @@ const DashboardSidebar = props => {
       }
         <FlexBox>
           <img src="/static/logo/kartlogo.png" alt="logo" width={32} />
-          {!COMPACT && <StyledLogo>TerryKart</StyledLogo>}
+          {!COMPACT && <StyledLogo>SkinEducation</StyledLogo>}
         </FlexBox>
         <Box mx={"auto"}></Box>
 

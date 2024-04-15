@@ -2,7 +2,8 @@ import { lightTheme } from "../constants";
 
 const components = theme => {
   const {
-    shadows
+    shadows,
+    palette
   } = theme;
   const {
     error,
@@ -12,7 +13,7 @@ const components = theme => {
     primary,
     text,
     success
-  } = theme.palette;
+  } = palette;
   return {
     MuiCssBaseline: {
       styleOverrides: {
@@ -29,6 +30,10 @@ const components = theme => {
           WebkitFontSmoothing: "antialiased"
         },
         body: {
+          width: "100%",
+          height: "100%"
+        },
+        "#__next": {
           width: "100%",
           height: "100%"
         },

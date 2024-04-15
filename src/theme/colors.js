@@ -1,17 +1,17 @@
 import { alpha } from "@mui/material/styles";
-const primaryMain = "#8D1F1F";
+const primaryMain = "#2499EF";
 export const primary = {
-  light: "#616161",
+  light: "#E5F3FD",
   main: primaryMain,
   100: alpha(primaryMain, 0.08),
   200: alpha(primaryMain, 0.2),
   300: alpha(primaryMain, 0.3),
   400: alpha(primaryMain, 0.4),
-  red: "#8d1f1f",
+  red: "#FF6B93",
   purple: "#A798FF",
   yellow: "#FF9777"
 };
-const secondaryMain = "#616161";
+const secondaryMain = "#23C657";
 export const secondary = {
   light: "#E3F0FF",
   main: secondaryMain,
@@ -52,19 +52,19 @@ export const greyLight = {
   600: "#455A79",
   700: "#2F4365",
   800: "#1E2E51",
-  900: "#8d1f1f"
+  900: "#121F43"
 }; // For dark theme
 
 export const greyDark = {
-  900: "#616161",
+  900: "#E9F3F9",
   800: "#D3E6F3",
   700: "#B1C9DC",
   600: "#8CA3BA",
-  500: "#616161",
-  400: "#616161",
+  500: "#5F748D",
+  400: "#455A79",
   300: "#2F4365",
   200: "#1E2E51",
-  100: "#8d1f1f",
+  100: "#121F43",
   50: "#111111"
 }; // For Light theme
 
