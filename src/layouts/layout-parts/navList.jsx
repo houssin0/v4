@@ -40,6 +40,26 @@ const index = [{
     name: "Project Management V2",
     path: "/dashboard/project-management-v2"
   }]
+},{
+  title: 'Dermatologie Images',
+  Icon: Icons.Image,
+  children: [{
+    name: 'Images',
+    path: '/dashboard/image-grid'
+  }, {
+    name: 'Add New Image',
+    path: '/dashboard/add-image'
+  }]
+},{
+  title: 'Dermatologie Diseases',
+  Icon: Icons.Image,
+  children: [{
+    name: 'Diseases',
+    path: '/dashboard/disease-grid'
+  }, {
+    name: 'Add New Disease',
+    path: '/dashboard/add-disease'
+  }]
 }, {
   title: "User & Contact",
   Icon: Icons.UserProfileIcon,

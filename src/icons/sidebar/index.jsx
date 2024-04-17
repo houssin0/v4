@@ -9,6 +9,7 @@ import EcommerceIcon from "./Ecommerce";
 import InvoiceIcon from "./Invoice";
 import KanbanIcon from "./Kanban";
 import PagesIcon from "./Pages";
+import Image from "icons/Image";
 import ProjectIcon from "./Projects";
 import SessionsIcon from "./Sessions";
 import UserManagementIcon from "./UserManagement";
@@ -23,6 +24,7 @@ export default {
   InvoiceIcon,
   SessionsIcon,
   CalendarIcon,
+  Image,
   DashboardIcon,
   DataTableIcon,
   EcommerceIcon,

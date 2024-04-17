@@ -93,6 +93,15 @@ const PrivacyPage = Loadable(lazy(() => import("./pages/privacy"))); // 404/Erro
 
 // const Error = Loadable(lazy(() => import("./pages/404")));
 
+// image management
+const ImageGrid = Loadable(lazy(() => import("./pages/images-dermatologie/image-grid")));
+const ImageDetails = Loadable(lazy(() => import("./pages/images-dermatologie/image-details")));
+const AddNewImage = Loadable(lazy(() => import("./pages/images-dermatologie/add-new-image")));
+
+// disease management
+const DiseaseGrid = Loadable(lazy(() => import("./pages/diseases-dermatologie/disease-grid")));
+const DiseaseDetails = Loadable(lazy(() => import("./pages/diseases-dermatologie/disease-details")));
+const AddNewDisease = Loadable(lazy(() => import("./pages/diseases-dermatologie/add-new-disease")));
 
 const routes = [
   {
@@ -154,6 +163,29 @@ const routes = [
     }, {
       path: "sub-child-v3",
       element: <ProjectManagementV2 />
+    }, {
+      path: "image-grid",
+      element: <ImageGrid />,
+    },
+    {
+      path: "disease-grid",
+      element: <DiseaseGrid />,
+    },
+    {
+      path: "add-image",
+      element: <AddNewImage />,
+    },
+    {
+      path: "add-disease",
+      element: <AddNewDisease />,
+    },
+    {
+      path: "image/:id",
+      element: <ImageDetails />,
+    },
+    {
+      path: "disease/:id",
+      element: <DiseaseDetails />,
     }, {
       path: "project-management",
       element: <ProjectManagement />

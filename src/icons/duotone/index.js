@@ -25,6 +25,7 @@ import PersonCircleCheck from "./PersonCircleCheck";
 import RectangleCirclePlus from "./RectangleCirclePlus";
 import DiagramProject from "./DiagramProject";
 import LayerGroup from "./LayerGroup";
+import Image from "icons/Image";
 import FileCircleQuestion from "./FileCircleQuestion";
 import UserList from "./UserList";
 
@@ -38,6 +39,7 @@ const Icons = {
   ElementHub,
   FileCircleQuestion,
   Logout,
+  Image,
   ProjectChart,
   Settings,
   UserProfile,

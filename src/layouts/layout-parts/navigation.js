@@ -50,6 +50,26 @@ export const navigations = [{
     name: 'Profile 2',
     path: '/dashboard/profile-v2'
   }]
+},{
+  name: 'Dermatologie Images',
+  icon: duotone.Image,
+  children: [{
+    name: 'Images',
+    path: '/dashboard/image-grid'
+  }, {
+    name: 'Add New Image',
+    path: '/dashboard/add-image'
+  }]
+},{
+  name: 'Dermatologie Diseases',
+  icon: duotone.Image,
+  children: [{
+    name: 'Diseases',
+    path: '/dashboard/disease-grid'
+  }, {
+    name: 'Add New Disease',
+    path: '/dashboard/add-disease'
+  }]
 }, {
   name: 'Accounts',
   icon: duotone.Accounts,
