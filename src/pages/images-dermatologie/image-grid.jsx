@@ -1,4 +1,3 @@
-// ImageGrid.jsx
 import React, { useState, useEffect } from "react";
 import { Box, Button, Grid, styled, MenuItem, Menu } from "@mui/material";
 import FlexBox from "components/flexbox/FlexBox";
@@ -8,7 +7,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { ImageList } from "./image-list";
 import { DiseaseList } from "../diseases-dermatologie/disease-list";
 
-// styled component
 const StyledFlexBox = styled(FlexBox)(({ theme }) => ({
   justifyContent: "space-between",
   alignItems: "center",
@@ -25,42 +23,35 @@ const StyledFlexBox = styled(FlexBox)(({ theme }) => ({
 }));
 
 const ImageGrid = () => {
-  // change navbar title
-
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleAddImage = () => navigate("/dashboard/add-image");
+  const [filterAnchorEl, setFilterAnchorEl] = useState(null);
+  const [sortAnchorEl, setSortAnchorEl] = useState(null);
+  const [selectedDisease, setSelectedDisease] = useState("Filter");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOption, setSortOption] = useState("Sort");
 
-  // State for managing filter and sort anchor elements
-  const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
-  const [sortAnchorEl, setSortAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedDisease, setSelectedDisease] = useState<string>("Filter");
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [sortOption, setSortOption] = useState<string>("Sort");
-
-useEffect(() => {
+  useEffect(() => {
     const params = new URLSearchParams(location.search);
     const option = params.get('option') || 'Sort';
     const disease = params.get('disease') || 'Filter';
     setSortOption(option);
     setSelectedDisease(disease);
-}, [location.search]);
+  }, [location.search]);
 
-const handleSearch = (term) => {
+  const handleSearch = (term) => {
     setSearchTerm(term);
-};
+  };
 
-  // Handler functions for filter and sort clicks
-const handleFilterClick = (event) => {
+  const handleFilterClick = (event) => {
     setFilterAnchorEl(event.currentTarget);
-};
+  };
 
   const handleSortClick = (event) => {
     setSortAnchorEl(event.currentTarget);
   };
 
-  // Close function for both menus
   const handleClose = () => {
     setFilterAnchorEl(null);
     setSortAnchorEl(null);
@@ -141,7 +132,7 @@ const handleFilterClick = (event) => {
             <MenuItem onClick={() => handleSort("Oldest First")}>Oldest First</MenuItem>
           </Menu>
         </Box>
-        <Button variant="contained" onClick={handleAddImage}>
+        <Button variant="contained" onClick={() => navigate("/dashboard/add-image")}>
           Add New Image
         </Button>
       </StyledFlexBox>
