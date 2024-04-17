@@ -154,14 +154,14 @@ export const navigations = [{
     name: 'Create Product',
     path: '/dashboard/create-product'
   }, {
-    name: 'Order Management',
-    path: '/dashboard/order-management'
-  }, {
+  //   name: 'Order Management',
+  //   path: '/dashboard/order-management'
+  // }, {
     name: 'Product Management',
     path: '/dashboard/product-management'
-  }, {
-    name: 'Customer Management',
-    path: '/dashboard/customer-management'
+  // }, {
+  //   name: 'Customer Management',
+  //   path: '/dashboard/customer-management'
   }]
 }, {
   name: 'Projects',

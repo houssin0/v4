@@ -26,9 +26,9 @@ import RectangleCirclePlus from "./RectangleCirclePlus";
 import DiagramProject from "./DiagramProject";
 import LayerGroup from "./LayerGroup";
 import FileCircleQuestion from "./FileCircleQuestion";
-import UserList from "./UserList"; // eslint-disable-next-line import/no-anonymous-default-export
+import UserList from "./UserList";
 
-export default {
+const Icons = {
   AdminEcommerce,
   ArrowLeftToLine,
   CommentsQuestionCheck,
@@ -59,3 +59,5 @@ export default {
   PersonChalkboard,
   PersonCircleCheck
 };
+
+export default Icons;

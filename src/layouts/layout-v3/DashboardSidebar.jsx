@@ -1,4 +1,4 @@
-import { Box, Grid, IconButton, styled, useMediaQuery, useTheme } from "@mui/material"; // Import useTheme
+import { Box, Grid, IconButton, styled, useMediaQuery } from "@mui/material"; // Import useTheme
 import FlexBetween from "components/flexbox/FlexBetween";
 import Scrollbar from "components/ScrollBar";
 import { useState } from "react";
@@ -27,7 +27,6 @@ const NavWrapper = styled(Box)(() => ({
 }));
 
 const StyledLogo = styled(Box)(() => {
-  const theme = useTheme();
   return {
     paddingLeft: 8,
     fontWeight: 700,

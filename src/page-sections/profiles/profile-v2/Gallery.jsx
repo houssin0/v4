@@ -4,8 +4,8 @@ import { useState } from "react"; // import LightBox from "react-image-lightbox"
 
 const Gallery = () => {
   const [value, setValue] = useState("");
-  const [photoIndex, setPhotoIndex] = useState(0);
-  const [openLightBox, setOpenLightBox] = useState(false);
+  const [ setPhotoIndex] = useState(0);
+  const [ setOpenLightBox] = useState(false);
   const filtered = itemData.filter(item => value ? item.category.includes(value) : item);
   const images = itemData.map(item => item.img);
 

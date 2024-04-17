@@ -41,7 +41,7 @@ const UkoProjectV1 = () => {
   };
 
   const projectList = ["in-progress", "upcoming", "blocked", "projects-total", "in-progress", "upcoming", "blocked", "projects-total", "upcoming"];
-  const filterList = projectList.filter(item => value === "0" || item === "upcoming" && value === "1" || item === "blocked" && value === "2" || item === "projects-total" && value === "2");
+  const filterList = projectList.filter(item => (value === "0" || item === "upcoming") && (value === "1" || item === "blocked") && (value === "2" || item === "projects-total"));
   return <Box pt={2} pb={4}>
       <TabContext value={value}>
         <Grid container spacing={3}>

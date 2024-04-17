@@ -1,131 +1,138 @@
-import { Button, ButtonBase, Divider, Stack, styled,Grid } from "@mui/material";
-import AppCheckBox from "components/AppCheckBox";
+import { LoadingButton } from "@mui/lab";
+import { Box, Button, Card, FormControlLabel, FormHelperText, Switch } from "@mui/material";
 import FlexBetween from "components/flexbox/FlexBetween";
-import FlexBox from "components/flexbox/FlexBox";
+import FlexRowAlign from "components/flexbox/FlexRowAlign";
 import AppTextField from "components/input-fields/AppTextField";
-import { Small } from "components/Typography";
-import Facebook from "icons/Facebook";
-import GoogleIcon from "icons/GoogleIcon";
-import Twitter from "icons/Twitter";
-import AuthenticationLayout from "page-sections/authentication/AuthenticationLayout";
-import React, { useState } from "react";
-import axios from "axios";
-import { rehashPassword } from './hashPassword';
-import { useNavigate } from "react-router-dom";
-const StyledButton = styled(ButtonBase)(({
-  theme
-}) => ({
-  width: "100%",
-  padding: 12,
-  marginBottom: 16,
-  borderRadius: "8px",
-  fontWeight: "500",
-  border: `1px solid ${theme.palette.divider}`,
-  [theme.breakpoints.down(454)]: {
-    width: "100%",
-    marginBottom: 8
-  }
-}));
+import { H1, Paragraph, Small } from "components/Typography";
+import { useFormik } from "formik";
+import useAuth from "hooks/useAuth";
+import { TextFieldWrapper } from "page-sections/authentication/StyledComponents";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
+import * as Yup from "yup";
 
 const Login = () => {
+  const {
+    login
+  } = useAuth();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  let navigate = useNavigate();
+  const initialValues = {
+    email: "demo@example.com",
+    password: "123456",
+    submit: null,
+    remember: true
+  }; // form field value validation schema
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const navigate = useNavigate();
-
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    axios.post("http://192.168.29.120:5000/api/v1/tkseller/seller/sellerlogin", { "email": email })
-      .then(async (response) => {
-        const passwordHash = response.data.data.passwordHash;
-        const passwordSalt = response.data.data.passwordSalt;
-        const rehashedPassword = await rehashPassword(password, passwordSalt);
-        if (passwordHash === rehashedPassword) {
-          console.log("Passwords match");
-          navigate("/dashboard");
-        } else {
-          console.log("Passwords do not match");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
+    password: Yup.string().min(6, "Password should be of minimum 6 characters length").required("Password is required")
+  });
+  const {
+    errors,
+    values,
+    touched,
+    handleBlur,
+    handleChange,
+    handleSubmit
+  } = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit: values => {
+      setLoading(true);
+      login(values.email, values.password).then(() => {
+        setLoading(false);
+        toast.success("You Logged In Successfully test");
+        navigate("/dashboard/sales");
+      }).catch(error => {
+        setError(error.message);
+        setLoading(false);
       });
-  };
-
-  return <AuthenticationLayout route="/register" description="New Here?" title="Seller Point" routeName="Create an account">
-      <form>
-        <Stack gap={2} mt={5}>
-        <Grid item  xs={12}>
-              <AppTextField fullWidth label="Email" variant="standard" value={email} onChange={handleEmailChange}/>
-            </Grid>
-            <Grid item  xs={12}>
-              <AppTextField fullWidth label="Password" type="password" variant="standard" value={password}  onChange={handlePasswordChange}/>
-            </Grid>
-          {/* <AppTextField fullWidth label="Email" />
-          <AppTextField fullWidth label="Password" /> */}
-          <FlexBetween>
-            <FlexBox alignItems="center" gap={1}>
-              <AppCheckBox defaultChecked />
-              <Small fontSize={12}>Remember me</Small>
-            </FlexBox>
-
-            <Button disableRipple sx={{
-            color: "error.main",
-            mb: 2
-          }}>
-              Forget Password
-            </Button>
-          </FlexBetween>
-
-          <Button variant="contained" onClick={handleSubmit}>Sign In</Button>
-        </Stack>
-      </form>
-
-      <Divider sx={{
-      marginTop: 4
+    }
+  });
+  return <FlexRowAlign flexDirection="column" sx={{
+    height: {
+      sm: "100%"
+    }
+  }}>
+      <Card sx={{
+      padding: 4,
+      maxWidth: 600,
+      boxShadow: 1
     }}>
-        {/* <Small color="text.disabled" px={1}>
-          OR
-        </Small> */}
-      </Divider>
+        <FlexRowAlign flexDirection="column" mb={5}>
+          <Box width={38} mb={1}>
+            <img src="/static/logo/SkinEdu.png" width="100%" alt="Uko Logo" />
+          </Box>
+          <H1 fontSize={24} fontWeight={700}>
+            Sign In to SkinEdu
+          </H1>
+        </FlexRowAlign>
 
-      {/* <Stack direction="row" justifyContent="space-between" flexWrap="wrap" my={3}>
-        <StyledButton>
-          <GoogleIcon sx={{
-          marginRight: 1,
-          fontSize: "1.2rem"
-        }} />
-          Signin with Google
-        </StyledButton>
+        <FlexBetween flexWrap="wrap" my="1rem">
+          
 
-        <StyledButton>
-          <Facebook sx={{
-          color: "#2475EF",
-          marginRight: 1,
-          fontSize: "1.2rem"
-        }} />
-          Signin with Facebook
-        </StyledButton>
+          <form noValidate onSubmit={handleSubmit} style={{
+          width: "100%"
+        }}>
+            <FlexBetween flexWrap="wrap">
+              <TextFieldWrapper>
+                <AppTextField fullWidth name="email" type="email" label="Email" onBlur={handleBlur} onChange={handleChange} value={values.email || ""} error={Boolean(touched.email && errors.email)} helperText={touched.email && errors.email} sx={{
+                mb: {
+                  xs: 1
+                }
+              }} />
+              </TextFieldWrapper>
 
-        <StyledButton>
-          <Twitter sx={{
-          color: "#45ABF7",
-          marginRight: 1,
-          fontSize: "1.2rem"
-        }} />
-          Signin with Twitter
-        </StyledButton>
-      </Stack> */}
-    </AuthenticationLayout>;
+              <TextFieldWrapper>
+                <AppTextField fullWidth name="password" type="password" label="Password" onBlur={handleBlur} onChange={handleChange} value={values.password || ""} error={Boolean(touched.password && errors.password)} helperText={touched.password && errors.password} />
+              </TextFieldWrapper>
+            </FlexBetween>
+
+            <FlexBetween mt={2}>
+              <FormControlLabel control={<Switch name="remember" checked={values.remember} onChange={handleChange} />} label="Remember Me" sx={{
+              "& .MuiTypography-root": {
+                fontWeight: 500
+              }
+            }} />
+              <Link to="/forget-password">
+                <Small color="secondary.red">Forgot Password?</Small>
+              </Link>
+            </FlexBetween>
+
+            {error && <FormHelperText error sx={{
+            mt: 2,
+            fontSize: 13,
+            fontWeight: 500,
+            textAlign: "center"
+          }}>
+                {error}
+              </FormHelperText>}
+
+            <Box sx={{
+            mt: 4
+          }}>
+              {loading ? <LoadingButton loading fullWidth variant="contained">
+                  Sign In
+                </LoadingButton> : <Button fullWidth type="submit" variant="contained">
+                  Sign In
+                </Button>}
+            </Box>
+          </form>
+
+          <Paragraph marginLeft="auto" marginRight="auto" mt={2} color="text.disabled">
+            Don't have an account?{" "}
+            <Link to="/register" style={{
+            display: "inline-block"
+          }}>
+              <Small color="primary.main">Create an account</Small>
+            </Link>
+          </Paragraph>
+        </FlexBetween>
+      </Card>
+    </FlexRowAlign>;
 };
 
 export default Login;

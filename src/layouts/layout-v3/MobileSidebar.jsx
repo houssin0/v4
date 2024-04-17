@@ -1,5 +1,4 @@
 import { Box, Grid, styled } from "@mui/material";
-import FlexBox from "components/flexbox/FlexBox";
 import Scrollbar from "components/ScrollBar";
 import LayoutDrawer from "layouts/layout-parts/LayoutDrawer";
 import MultiLevelMenu from "./MultiLevelMenu";

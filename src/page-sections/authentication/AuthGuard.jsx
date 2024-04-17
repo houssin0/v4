@@ -1,5 +1,5 @@
 import useAuth from "hooks/useAuth";
-import Login from "pages/authentication/login-v2";
+import Login from "pages/authentication/login";
 import React, { Fragment, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom"; // component props interface
 

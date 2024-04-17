@@ -1,105 +1,102 @@
-import { Box, Button, Stack, TextField, Grid  } from "@mui/material";
-import FlexBox from "components/flexbox/FlexBox";
+import { LoadingButton } from "@mui/lab";
+import { Box, Button, Card, FormHelperText } from "@mui/material";
+import FlexBetween from "components/flexbox/FlexBetween";
 import FlexRowAlign from "components/flexbox/FlexRowAlign";
 import AppTextField from "components/input-fields/AppTextField";
-import { H1, Paragraph } from "components/Typography";
-import React, { useState } from "react";
+import { H1, Small } from "components/Typography";
+import { useFormik } from "formik";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
+import * as Yup from "yup";
 
 const ForgetPassword = () => {
-  const [input, setInput] = useState(0);
-  const [percentage1, setPercentage1] = useState(0);
-  const [percentage2, setPercentage2] = useState(0);
-  const [percentage3, setPercentage3] = useState(0);
-  const [subtract, setSubtract] = useState(0);
-  const [result, setResult] = useState(0);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const initialValues = {
+    email: "demo@example.com",
+    submit: null
+  }; // form field value validation schema
 
-  const handleInputChange = (e) => {
-    setInput(e.target.value);
-  };
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().email("Must be a valid email").max(255).required("Email is required")
+  });
+  const {
+    errors,
+    values,
+    touched,
+    handleBlur,
+    handleChange,
+    handleSubmit
+  } = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit: values => {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        toast.success("Reset link has been sent!");
+      }, 1000);
 
-  const handlePercentage1Change = (e) => {
-    setPercentage1(e.target.value);
-  };
+      if (error) {
+        setError("Error!");
+        setLoading(false);
+      }
+    }
+  });
+  return <FlexRowAlign height="100vh" flexDirection="column">
+      <Card sx={{
+      padding: 4,
+      maxWidth: 600,
+      marginTop: 4,
+      boxShadow: 1
+    }}>
+        <FlexBetween flexDirection="column" mb={5}>
+          <Box width={38} mb={1}>
+            <img src="/static/logo/SkinEdu.png" width="100%" alt="SkinEdu Logo" />
+          </Box>
+          <H1 fontSize={18} fontWeight={500}>
+            Reset your password
+          </H1>
+        </FlexBetween>
 
-  const handlePercentage2Change = (e) => {
-    setPercentage2(e.target.value);
-  };
+        <FlexBetween flexWrap="wrap" my={2}>
+          <form noValidate onSubmit={handleSubmit} style={{
+          width: "100%"
+        }}>
+            <AppTextField fullWidth name="email" type="email" label="Email" onBlur={handleBlur} onChange={handleChange} value={values.email || ""} error={Boolean(touched.email && errors.email)} helperText={touched.email && errors.email} />
 
-  const handlePercentage3Change = (e) => {
-    setPercentage3(e.target.value);
-  };
+            {error && <FormHelperText error sx={{
+            mt: 2,
+            fontSize: 13,
+            fontWeight: 500,
+            textAlign: "center"
+          }}>
+                {error}
+              </FormHelperText>}
 
-  const handleSubtractChange = (e) => {
-    setSubtract(e.target.value);
-  };
+            <Box sx={{
+            mt: 4
+          }}>
+              {loading ? <LoadingButton loading fullWidth variant="contained">
+                  Reset
+                </LoadingButton> : <Button fullWidth type="submit" variant="contained">
+                  Reset
+                </Button>}
+            </Box>
+          </form>
 
-  const calculate = () => {
-      let result1 = input - (input * percentage1) / 100;
-      let intermediate1 = input - result1;
-      let result2 = intermediate1 - (intermediate1 * percentage2) / 100;
-      let intermediate2 = intermediate1 - result2;
-    // let result3 = input - (input * percentage3) / 100;
-    // let intermediate3 = input - result3;
-
-    setResult(input - intermediate1 - intermediate2 - subtract);
-  };
-
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "100vh",
-      }}
-    >
-      <Grid>
-        <h1>Percentage Calculator</h1>
-        <p>Selling Price:</p>
-        <TextField size="small" type="number" value={input} onChange={handleInputChange} />
-        <p>Referral Fee:</p>
-        <TextField
-          size="small"
-          type="number"
-          placeholder="Percentage 1"
-          value={percentage1}
-          onChange={handlePercentage1Change}
-        />
-        <p>GST on Referral Fee:</p>
-        <TextField
-          size="small"
-          type="number"
-          placeholder="Percentage 2"
-          value={percentage2}
-          onChange={handlePercentage2Change}
-        />
-        {/* <p>GST on Items:</p>
-        <input
-          type="number"
-          placeholder="Percentage 3"
-          value={percentage3}
-          onChange={handlePercentage3Change}
-        /> */}
-        <p>Shipping cost:</p>
-        <TextField
-          size="small"
-          type="number"
-          placeholder="Subtract"
-          value={subtract}
-          onChange={handleSubtractChange}
-        />
-        <p></p>
-        <Button
-          variant="contained"
-          style={{ backgroundColor: "#8d1f1f", color: "#ffffff" }}
-          onClick={calculate}
-        >
-          Calculate
-        </Button>
-        <p>Result: {result}</p>
-      </Grid>
-      </Box>
-  );
+          <Small margin="auto" mt={3} color="text.disabled">
+            Don't have an account?{" "}
+            <Link to="/register" style={{
+            display: "inline-block"
+          }}>
+              <Small color="primary.main">Create an account</Small>
+            </Link>
+          </Small>
+        </FlexBetween>
+      </Card>
+    </FlexRowAlign>;
 };
 
 export default ForgetPassword;

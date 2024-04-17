@@ -1,255 +1,232 @@
-import { Button, Grid, ButtonBase, Divider, Stack, styled, TextField, Radio, RadioGroup, FormControl, FormControlLabel, Alert, Checkbox, Box } from "@mui/material";
-import AuthenticationLayout from "page-sections/authentication/AuthenticationLayout";
-import { Small } from "components/Typography";
+import { LoadingButton } from "@mui/lab";
+import { Box, Button, Card, MenuItem, FormControlLabel, Checkbox, FormHelperText } from "@mui/material";
+import FlexBox from "components/flexbox/FlexBox";
 import AppTextField from "components/input-fields/AppTextField";
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
-import Facebook from "icons/Facebook";
-import GoogleIcon from "icons/GoogleIcon";
-import Twitter from "icons/Twitter";
-import axios from "axios";
-import validator from 'validator';
-import { fontSize, textAlign } from "@mui/system";
-import { useNavigate } from "react-router-dom";
-import MuiAlert from '@mui/material/Alert';
-
-const StyledButton = styled(ButtonBase)(({
-  theme
-}) => ({
-  width: "100%",
-  padding: 12,
-  marginBottom: 16,
-  borderRadius: "6px",
-  fontWeight: "500",
-  color: "white",
-  backgroundColor: '#8D1F1F',
-  [theme.breakpoints.down(454)]: {
-    width: "100%",
-    marginBottom: 8
-  }
-}));
-
+import { H1, Small } from "components/Typography";
+import { useFormik } from "formik";
+import useAuth from "hooks/useAuth";
+import { TextFieldWrapper } from "page-sections/authentication/StyledComponents";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
+import * as Yup from "yup";
 
 const Register = () => {
-
+  const {
+    register
+  } = useAuth();
   const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const uniqueNumber = Math.floor(Math.random() * 10000000);
+  const initialValues = {
+    name: "",
+    email: "",
+    password: "",
+    repeatPassword: "",
+    userType: "",
+    terms: true,
+    submit: null,
+  };
 
-  function handleChange(e) {
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required("Name is required"),
+    email: Yup.string()
+      .email("Must be a valid email")
+      .max(255)
+      .required("Email is required"),
+    password: Yup.string()
+      .min(6, "Password should be of minimum 6 characters length")
+      .required("Password is required"),
+    repeatPassword: Yup.string()
+      .oneOf([Yup.ref("password"), null], "Passwords must match")
+      .required("Repeat password is required"),
+    userType: Yup.string().required("User type is required"),
+    terms: Yup.boolean().oneOf([true], "You must accept the terms and conditions"),
+  });
 
-    console.log(`${parseInt(uniqueNumber)}, ${email}, ${name}, ${whatsappNumber}, ${businessName}, ${productSelling}, ${location}, ${isAmirtha}`);
-    axios.post('http://192.168.29.120:5000/api/v1/tkseller/seller/sellerregister',
-      {
-        "sellergeneral": {
-          "sellerUId": parseInt(uniqueNumber),
-          "email": email,
-          "firstName": name,
-          "whatsupno": whatsappNumber,
-          "isAmirtha": isAmirtha
-        },
-
-        "sellerBusiness": {
-          "businessname": businessName,
-          "productname": productSelling,
-          "productType": parseInt(location)
+  const { errors, values, touched, handleBlur, handleChange, handleSubmit } =
+    useFormik({
+      initialValues,
+      validationSchema,
+      onSubmit: async (values) => {
+        setLoading(true);
+        try {
+          await register(values.email, values.password, values.name);
+          setLoading(false);
+          toast.success("You registered successfully");
+          navigate("/login");
+        } catch (error) {
+          setError(error?.message);
+          setLoading(false);
         }
-      }
-    )
-      .then(function (response) {
-        console.log(response.data);
-        console.log(response.status);
-        console.log(response.data.message);
-        console.log(response.data.data.sellerId);
-        if (response.status === 200) {
-          setAlertMessage(<Alert variant="filled" severity="success">{response.data.message}</Alert>);
-          setTimeout(() => {
-            const sellerId = response.data.data.sellerId;
-            console.log(sellerId)
-            navigate('/new-password', { state: { sellerId: sellerId } });
-          }, 2000)
-        } else if (response.status === 201) {
-          setAlertMessage(<Alert variant="filled" severity="error">{response.data.message}</Alert>);
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    e.preventDefault();
-  }
+      },
+    });
 
+  return (
+    <FlexBox
+      sx={{
+        alignItems: "center",
+        flexDirection: "column",
+        justifyContent: "center",
+        height: { sm: "100%" },
+      }}
+    >
+      <Card sx={{ padding: 4, maxWidth: 600, boxShadow: 1 }}>
+        <FlexBox
+          alignItems="center"
+          flexDirection="column"
+          justifyContent="center"
+          mb={5}
+        >
+          <Box width={38} mb={1}>
+            <img src="/static/logo/SkinEdu.png" width="100%" alt="SkinEdu Logo" />
+          </Box>
+          <H1 fontSize={24} fontWeight={700}>
+            Get started with SkinEdu
+          </H1>
+        </FlexBox>
 
-  function forName(e) {
-    setName(e.target.value);
-  };
-  function forEmail(e) {
-    setEmail(e.target.value);
+        <FlexBox justifyContent="space-between" flexWrap="wrap" my="1rem">
+          <form noValidate onSubmit={handleSubmit} style={{ width: "100%" }}>
+            <FlexBox justifyContent="space-between" flexWrap="wrap">
+              <TextFieldWrapper>
+                <AppTextField
+                  fullWidth
+                  name="name"
+                  type="text"
+                  label="Name"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.name || ""}
+                  error={Boolean(touched.name && errors.name)}
+                  helperText={touched.name && errors.name}
+                  margin="normal"
+                />
+              </TextFieldWrapper>
 
-    ((e) => {
-      if (validator.isEmail(email)) {
-        setMessage("");
-      } else {
-        setMessage(<Alert severity="error">Please enter a valid email!</Alert>);
-      }
-    })();
+              <TextFieldWrapper>
+                <AppTextField
+                  fullWidth
+                  name="email"
+                  type="email"
+                  label="Email"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.email || ""}
+                  error={Boolean(touched.email && errors.email)}
+                  helperText={touched.email && errors.email}
+                  margin="normal"
+                />
+              </TextFieldWrapper>
+            </FlexBox>
 
-    if (whatsappNumber.length > 8 && validator.isEmail(email)) {
-      setDisabled(false);
-    }
-    else {
-      setDisabled(true);
-    }
-  };
-  function forWhatsappNumber(e) {
-    setWhatsappNumber(e.target.value);
-    if (whatsappNumber.length > 8 && validator.isEmail(email)) {
-      setDisabled(false);
-    }
-    else {
-      setDisabled(true);
-    }
-  };
-  function forBusinessName(e) {
-    setBusinessName(e.target.value);
-  };
-  function forProductSelling(e) {
-    setProductSelling(e.target.value);
-  };
-  const locationChange = (event) => {
-    setLocation(event.target.value);
-  };
-  const programClick = () => {
-    window.open('http://localhost:3000/new-password', '_blank');
-  };
+            <FlexBox justifyContent="space-between" flexWrap="wrap">
+              <TextFieldWrapper>
+                <AppTextField
+                  fullWidth
+                  name="password"
+                  type="password"
+                  label="Password"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.password || ""}
+                  error={Boolean(touched.password && errors.password)}
+                  helperText={touched.password && errors.password}
+                  margin="normal"
+                />
+              </TextFieldWrapper>
+                
+              <TextFieldWrapper>
+                <AppTextField
+                  fullWidth
+                  name="repeatPassword"
+                  type="password"
+                  label="Repeat Password"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.repeatPassword || ""}
+                  error={Boolean(touched.repeatPassword && errors.repeatPassword)}
+                  helperText={touched.repeatPassword && errors.repeatPassword}
+                  margin="normal"
+                />
+              </TextFieldWrapper>
 
-  
+              </FlexBox>
 
+            <TextFieldWrapper sx={{ width: "100%" }}>
+              <AppTextField
+                fullWidth
+                select
+                name="userType"
+                label="Select User Type"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.userType || ""}
+                error={Boolean(touched.userType && errors.userType)}
+                helperText={touched.userType && errors.userType}
+                margin="normal"
+                >
+                <MenuItem value="med_student">Medicine Student</MenuItem>
+                <MenuItem value="med_teacher">Medicine Teacher</MenuItem>
+              </AppTextField>
+            </TextFieldWrapper>
 
-
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [whatsappNumber, setWhatsappNumber] = useState("");
-  const [businessName, setBusinessName] = useState("");
-  const [productSelling, setProductSelling] = useState("");
-  const [location, setLocation] = useState("1");
-  const [disabled, setDisabled] = useState(true);
-  const [message, setMessage] = useState("");
-  const [alertMessage, setAlertMessage] = useState();
-  const [isAmirtha, setIsAmirtha] = useState(false);
-
-
-
-  return <AuthenticationLayout route="/login" routeName="Login" title="Start Selling" description="Have an account?">
-    {alertMessage}
-    <form onSubmit={handleChange}>
-      <Stack gap={2} mt={5}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <AppTextField fullWidth label="Name" variant="standard" onChange={forName} value={name} />
-          </Grid>
-
-          <Grid item xs={12}>
-            <AppTextField required fullWidth label="Email" variant="standard" onChange={forEmail} value={email} autoComplete="off" />
-            <br />
-            <span
-              style={{
-                fontWeight: "bold",
-                color: "red"
+             <FormControlLabel
+              control={
+                <Checkbox
+                  disableRipple
+                  checked={values.terms}
+                  onChange={handleChange}
+                  name="terms"
+                />
+              }
+              label="I agree to terms & conditions"
+              sx={{
+                marginTop: "0.5rem",
+                marginLeft:"0rem",
+                "& .MuiTypography-root": { fontWeight: 600 },
               }}
-            >
-              {message}
-            </span>
-          </Grid>
+            />
 
-          <Grid item xs={12}>
-            <AppTextField required fullWidth label="Whatsapp No" variant="standard" onChange={forWhatsappNumber} value={whatsappNumber} autoComplete="off" />
-          </Grid>
 
-          <Grid item xs={12} align="left">
-            <Checkbox checked={isAmirtha} onChange={event => setIsAmirtha(event.target.checked)}/>
-            <label>Are you a woman entrepreneur?</label>
-          </Grid>
+            {error && (
+              <FormHelperText
+                error
+                sx={{
+                  mt: 2,
+                  fontSize: 13,
+                  fontWeight: 500,
+                  textAlign: "center",
+                }}
+              >
+                {error}
+              </FormHelperText>
+            )}
 
-          {isAmirtha &&
-            <Box m={2} mb={-2}>
-              <Button variant="contained" onClick={ programClick }>Enroll To Amirtha Women Entrepreneurship Development Program</Button>
+            <Box sx={{ mt: 4 }}>
+              {loading ? (
+                <LoadingButton loading fullWidth variant="contained">
+                  Sign Up
+                </LoadingButton>
+              ) : (
+                <Button fullWidth type="submit" variant="contained">
+                  Sign Up
+                </Button>
+              )}
             </Box>
-          }
+          </form>
 
-
-          <Grid item xs={12}>
-            <AppTextField fullWidth label="Business Name" variant="standard" onChange={forBusinessName} value={businessName} />
-          </Grid>
-          <Grid item xs={12}>
-            <AppTextField fullWidth label="Product Selling" variant="standard" onChange={forProductSelling} value={productSelling} />
-          </Grid>
-
-          <Grid item xs={12} align="left">
-            <FormControl component="fieldset">
-              <RadioGroup name="location" value={location} onChange={locationChange}>
-                <FormControlLabel value="1" control={<Radio />} label="Is Your Product Made in India" />
-                <div style={{ textAlign: "center" }}>
-                  <p>(Or)</p>
-                </div>
-                <FormControlLabel value="2" control={<Radio />} label="Is Your Product Imported From Other Countries" />
-              </RadioGroup>
-            </FormControl>
-          </Grid>
-
-          <Grid item xs={12}>
-            <StyledButton onClick={handleChange} disabled={disabled} style={{ filter: disabled ? "blur(1px) opacity(0.5)" : "" }}>
-              SignUp
-            </StyledButton>
-
-            <Small fontSize={12} color="text.disabled" mt={2}>
-              By signing up, I agree to UI Lib{" "}
-              <NavLink to="#" style={{
-                fontWeight: 600
-              }}>
-                Terms of Service & Privacy Policy
-              </NavLink>
-            </Small>
-          </Grid>
-        </Grid>
-      </Stack>
-    </form>
-
-    {/* <Divider sx={{
-      marginTop: 4
-    }}>
-        <Small color="text.disabled" px={1}>
-          OR
-        </Small>
-      </Divider>
-
-      <Stack direction="row" justifyContent="space-between" flexWrap="wrap" my={3}>
-        <StyledButton>
-          <GoogleIcon sx={{
-          marginRight: 1,
-          fontSize: "1.2rem"
-        }} />
-          Signin with Google
-        </StyledButton>
-
-        <StyledButton>
-          <Facebook sx={{
-          color: "#2475EF",
-          marginRight: 1,
-          fontSize: "1.2rem"
-        }} />
-          Signin with Facebook
-        </StyledButton>
-
-        <StyledButton>
-          <Twitter sx={{
-          color: "#45ABF7",
-          marginRight: 1,
-          fontSize: "1.2rem"
-        }} />
-          Signin with Twitter
-        </StyledButton>
-      </Stack> */}
-  </AuthenticationLayout>;
+          <Small margin="auto" mt={3} color="text.disabled">
+            Do you already have an account?{" "}
+            <Link to="/login">
+              <Small color="primary.main">Log in</Small>
+            </Link>
+          </Small>
+        </FlexBox>
+      </Card>
+    </FlexBox>
+  );
 };
 
 export default Register;

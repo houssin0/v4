@@ -1,10 +1,9 @@
 import LoadingScreen from "components/LoadingScreen";
-import useSettings from "hooks/useSettings";
-import DashboardLayoutV1 from "layouts/layout-v1/DashboardLayout";
-import LayoutV2 from "layouts/layout-v2/LayoutV2";
-import DashboardLayoutV3 from "layouts/layout-v3/DashboardLayout";
+import DashboardLayout from "layouts/layout-v3/DashboardLayout";
 import { lazy, Suspense } from "react";
 import { Navigate } from "react-router-dom";
+import AuthGuard from "./page-sections/authentication/AuthGuard";
+import GuestGuard from "./page-sections/authentication/GuestGuard";
 
 const Loadable = Component => props => {
   return <Suspense fallback={<LoadingScreen />}>
@@ -63,19 +62,19 @@ const TodoList = Loadable(lazy(() => import("./pages/todo-list"))); // pricing
 const Calendar = Loadable(lazy(() => import("./pages/calendar"))); // authentication
 
 const Login = Loadable(lazy(() => import("./pages/authentication/login")));
-const LoginV2 = Loadable(lazy(() => import("./pages/authentication/login-v2")));
+// const LoginV2 = Loadable(lazy(() => import("./pages/authentication/login")));
 const Register = Loadable(lazy(() => import("./pages/authentication/register")));
-const RegisterV2 = Loadable(lazy(() => import("./pages/authentication/register-v2")));
-const NewPassword = Loadable(lazy(() => import("./pages/authentication/new-password")));
+// const RegisterV2 = Loadable(lazy(() => import("./pages/authentication/register")));
+// const NewPassword = Loadable(lazy(() => import("./pages/authentication/new-password")));
 const ForgetPassword = Loadable(lazy(() => import("./pages/authentication/forget-password")));
-const ForgetPasswordV2 = Loadable(lazy(() => import("./pages/authentication/forget-password-v2")));
-const TwoStepVerify = Loadable(lazy(() => import("./pages/authentication/two-step-verification"))); // admin ecommerce
+// const ForgetPasswordV2 = Loadable(lazy(() => import("./pages/authentication/forget-password")));
+// const TwoStepVerify = Loadable(lazy(() => import("./pages/authentication/two-step-verification"))); // admin ecommerce
 
 const ProductList = Loadable(lazy(() => import("./pages/admin-ecommerce/product-list")));
 const ProductGrid = Loadable(lazy(() => import("./pages/admin-ecommerce/product-grid")));
 const CreateProduct = Loadable(lazy(() => import("./pages/admin-ecommerce/create-product")));
-const CustomerManagement = Loadable(lazy(() => import("./pages/admin-ecommerce/customer-management")));
-const OrderManagement = Loadable(lazy(() => import("./pages/admin-ecommerce/order-management")));
+// const CustomerManagement = Loadable(lazy(() => import("./pages/admin-ecommerce/customer-management")));
+// const OrderManagement = Loadable(lazy(() => import("./pages/admin-ecommerce/order-management")));
 const ProductManagement = Loadable(lazy(() => import("./pages/admin-ecommerce/product-management"))); // chat
 
 const ChatV1 = Loadable(lazy(() => import("./pages/chats/chat-v1")));
@@ -92,243 +91,214 @@ const ContactPage = Loadable(lazy(() => import("./pages/contact")));
 const PricingPage = Loadable(lazy(() => import("./pages/pricing-v2")));
 const PrivacyPage = Loadable(lazy(() => import("./pages/privacy"))); // 404/Error page
 
-const Error = Loadable(lazy(() => import("./pages/404")));
+// const Error = Loadable(lazy(() => import("./pages/404")));
 
-const ActiveLayout = () => {
-  const {
-    settings
-  } = useSettings(); // console.log(settings);
 
-  switch (settings.activeLayout) {
-    case "layout1":
-      return <DashboardLayoutV1 />;
-
-    case "layout2":
-      return <LayoutV2 />;
-
-    case "layout3":
-      return <DashboardLayoutV3 />;
-
-    default:
-      return <DashboardLayoutV1 />;
-  }
-};
-
-const routes = () => {
-  return [...authRoutes, {
-    path: "dashboard",
-    element: <ActiveLayout />,
-    children: dashboardRoutes
+const routes = [
+  {
+    path: "/",
+    element: <Navigate to="/dashboard" />
   }, {
-    path: "*",
-    element: <Error />
-  }];
-};
+    path: "login",
+    element: (
+      <GuestGuard>
+        <Login />
+      </GuestGuard>
+    ),
+  }, {
+    path: "register",
+    element: (
+      <GuestGuard>
+        <Register />
+      </GuestGuard>
+    ),
+  }, {
+    path: "forget-password",
+    element:(
+      <GuestGuard>
+        <ForgetPassword />
+      </GuestGuard>
+    ),
+  },
+  {
+    path: "dashboard",
+    element: (
+      <AuthGuard>
+        <DashboardLayout />
+      </AuthGuard>
+    ),
+    children: [{
+      path: "",
+      element: <LearningManagement />
+    }, {
+      path: "job-management",
+      element: <JobManagement />
+    }, {
+      path: "sales",
+      element: <Sales />
+    }, {
+      path: "sales-v2",
+      element: <SalesV2 />
+    }, {
+      path: "crm",
+      element: <CRM />
+    }, {
+      path: "saas",
+      element: <SaaS />
+    }, {
+      path: "sub-child-v1",
+      element: <SalesV2 />
+    }, {
+      path: "sub-child-v2",
+      element: <ProjectManagement />
+    }, {
+      path: "sub-child-v3",
+      element: <ProjectManagementV2 />
+    }, {
+      path: "project-management",
+      element: <ProjectManagement />
+    }, {
+      path: "project-management-v2",
+      element: <ProjectManagementV2 />
+    }, {
+      path: "account",
+      element: <Account />
+    }, {
+      path: "account-v2",
+      element: <AccountV2 />
+    }, {
+      path: "profile",
+      element: <Profile />
+    }, {
+      path: "profile-v2",
+      element: <ProfileV2 />
+    }, {
+      path: "data-table-v2",
+      element: <DataTableV2 />
+    }, {
+      path: "add-user",
+      element: <AddUser />
+    }, {
+      path: "user-list",
+      element: <UserList />
+    }, {
+      path: "user-list-v2",
+      element: <UserListV2 />
+    }, {
+      path: "user-grid",
+      element: <UserGrid />
+    }, {
+      path: "user-grid-v2",
+      element: <UserGridV2 />
+    }, {
+      path: "contact-list",
+      element: <ContactList />
+    }, {
+      path: "contact-grid",
+      element: <ContactGrid />
+    }, {
+      path: "invoice-list",
+      element: <InvoiceList />
+    }, {
+      path: "invoice-list-v2",
+      element: <InvoiceList2 />
+    }, {
+      path: "create-invoice",
+      element: <CreateInvoice />
+    }, {
+      path: "create-invoice-v2",
+      element: <CreateInvoice2 />
+    }, {
+      path: "invoice-details",
+      element: <InvoiceDetails />
+    }, {
+      path: "invoice-details-v2",
+      element: <InvoiceDetails2 />
+    }, {
+      path: "project-v1",
+      element: <ProjectV1 />
+    }, {
+      path: "project-v2",
+      element: <ProjectV2 />
+    }, {
+      path: "project-v3",
+      element: <ProjectV3 />
+    }, {
+      path: "team-member",
+      element: <TeamMember />
+    }, {
+      path: "project-details",
+      element: <ProjectDetails />
+    }, {
+      path: "shop",
+      element: <Shop />
+    }, {
+      path: "shop-v2",
+      element: <ShopV2 />
+    }, {
+      path: "cart",
+      element: <Cart />
+    }, {
+      path: "payment",
+      element: <Payment />
+    }, {
+      path: "checkout",
+      element: <Checkout />
+    }, {
+      path: "checkout-v2",
+      element: <CheckoutV2 />
+    }, {
+      path: "product-details",
+      element: <ProductDetails />
+    }, {
+      path: "billing-address",
+      element: <BillingAddress />
+    }, {
+      path: "payment-complete",
+      element: <PaymentComplete />
+    }, {
+      path: "payment-complete-v2",
+      element: <PaymentCompleteV2 />
+    }, {
+      path: "product-list",
+      element: <ProductList />
+    }, {
+      path: "product-grid",
+      element: <ProductGrid />
+    }, {
+      path: "create-product",
+      element: <CreateProduct />
+    }, {
+      path: "product-management",
+      element: <ProductManagement />
+    }, {
+      path: "chat-v1",
+      element: <ChatV1 />
+    }, {
+      path: "chat-v2",
+      element: <ChatV2 />
+    }, {
+      path: "pricing",
+      element: <Pricing />
+    }, {
+      path: "todo-list",
+      element: <TodoList />
+    }, {
+      path: "calender",
+      element: <Calendar />
+    }, {
+      path: "about",
+      element: <AboutPage />
+    }, {
+      path: "contact",
+      element: <ContactPage />
+    }, {
+      path: "pricing",
+      element: <PricingPage />
+    }, {
+      path: "privacy",
+      element: <PrivacyPage />
+    }]}
+];
 
-const authRoutes = [{
-  path: "/",
-  element: <Navigate to="/dashboard" />
-}, {
-  path: "login",
-  element: <Login />
-}, {
-  path: "login-v2",
-  element: <LoginV2 />
-}, {
-  path: "register",
-  element: <Register />
-}, {
-  path: "register-v2",
-  element: <RegisterV2 />
-}, {
-  path: "new-password",
-  element: <NewPassword />
-}, {
-  path: "calculator",
-  element: <ForgetPassword />
-}, {
-  path: "forget-password-v2",
-  element: <ForgetPasswordV2 />
-}, {
-  path: "two-step-verification",
-  element: <TwoStepVerify />
-}];
-const dashboardRoutes = [{
-  path: "",
-  element: <LearningManagement />
-}, {
-  path: "job-management",
-  element: <JobManagement />
-}, {
-  path: "sales",
-  element: <Sales />
-}, {
-  path: "sales-v2",
-  element: <SalesV2 />
-}, {
-  path: "crm",
-  element: <CRM />
-}, {
-  path: "saas",
-  element: <SaaS />
-}, {
-  path: "sub-child-v1",
-  element: <SalesV2 />
-}, {
-  path: "sub-child-v2",
-  element: <ProjectManagement />
-}, {
-  path: "sub-child-v3",
-  element: <ProjectManagementV2 />
-}, {
-  path: "project-management",
-  element: <ProjectManagement />
-}, {
-  path: "project-management-v2",
-  element: <ProjectManagementV2 />
-}, {
-  path: "account",
-  element: <Account />
-}, {
-  path: "account-v2",
-  element: <AccountV2 />
-}, {
-  path: "profile",
-  element: <Profile />
-}, {
-  path: "profile-v2",
-  element: <ProfileV2 />
-}, {
-  path: "data-table-v2",
-  element: <DataTableV2 />
-}, {
-  path: "add-user",
-  element: <AddUser />
-}, {
-  path: "user-list",
-  element: <UserList />
-}, {
-  path: "user-list-v2",
-  element: <UserListV2 />
-}, {
-  path: "user-grid",
-  element: <UserGrid />
-}, {
-  path: "user-grid-v2",
-  element: <UserGridV2 />
-}, {
-  path: "contact-list",
-  element: <ContactList />
-}, {
-  path: "contact-grid",
-  element: <ContactGrid />
-}, {
-  path: "invoice-list",
-  element: <InvoiceList />
-}, {
-  path: "invoice-list-v2",
-  element: <InvoiceList2 />
-}, {
-  path: "create-invoice",
-  element: <CreateInvoice />
-}, {
-  path: "create-invoice-v2",
-  element: <CreateInvoice2 />
-}, {
-  path: "invoice-details",
-  element: <InvoiceDetails />
-}, {
-  path: "invoice-details-v2",
-  element: <InvoiceDetails2 />
-}, {
-  path: "project-v1",
-  element: <ProjectV1 />
-}, {
-  path: "project-v2",
-  element: <ProjectV2 />
-}, {
-  path: "project-v3",
-  element: <ProjectV3 />
-}, {
-  path: "team-member",
-  element: <TeamMember />
-}, {
-  path: "project-details",
-  element: <ProjectDetails />
-}, {
-  path: "shop",
-  element: <Shop />
-}, {
-  path: "shop-v2",
-  element: <ShopV2 />
-}, {
-  path: "cart",
-  element: <Cart />
-}, {
-  path: "payment",
-  element: <Payment />
-}, {
-  path: "checkout",
-  element: <Checkout />
-}, {
-  path: "checkout-v2",
-  element: <CheckoutV2 />
-}, {
-  path: "product-details",
-  element: <ProductDetails />
-}, {
-  path: "billing-address",
-  element: <BillingAddress />
-}, {
-  path: "payment-complete",
-  element: <PaymentComplete />
-}, {
-  path: "payment-complete-v2",
-  element: <PaymentCompleteV2 />
-}, {
-  path: "product-list",
-  element: <ProductList />
-}, {
-  path: "product-grid",
-  element: <ProductGrid />
-}, {
-  path: "create-product",
-  element: <CreateProduct />
-}, {
-  path: "customer-management",
-  element: <CustomerManagement />
-}, {
-  path: "order-management",
-  element: <OrderManagement />
-}, {
-  path: "product-management",
-  element: <ProductManagement />
-}, {
-  path: "chat-v1",
-  element: <ChatV1 />
-}, {
-  path: "chat-v2",
-  element: <ChatV2 />
-}, {
-  path: "pricing",
-  element: <Pricing />
-}, {
-  path: "todo-list",
-  element: <TodoList />
-}, {
-  path: "calender",
-  element: <Calendar />
-}, {
-  path: "about",
-  element: <AboutPage />
-}, {
-  path: "contact",
-  element: <ContactPage />
-}, {
-  path: "pricing",
-  element: <PricingPage />
-}, {
-  path: "privacy",
-  element: <PrivacyPage />
-}];
 export default routes;
