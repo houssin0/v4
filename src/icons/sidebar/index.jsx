@@ -9,11 +9,12 @@ import EcommerceIcon from "./Ecommerce";
 import InvoiceIcon from "./Invoice";
 import KanbanIcon from "./Kanban";
 import PagesIcon from "./Pages";
-import Image from "icons/Image";
+import DermatologieIcon from "./Dermatologie";
 import ProjectIcon from "./Projects";
 import SessionsIcon from "./Sessions";
 import UserManagementIcon from "./UserManagement";
-import UserProfileIcon from "./UserProfile"; // eslint-disable-next-line import/no-anonymous-default-export
+import UserProfileIcon from "./UserProfile";
+import CoronavirusIcon from '@mui/icons-material/Coronavirus';
 
 export default {
   ChatIcon,
@@ -24,8 +25,9 @@ export default {
   InvoiceIcon,
   SessionsIcon,
   CalendarIcon,
-  Image,
+  DermatologieIcon,
   DashboardIcon,
+  CoronavirusIcon,
   DataTableIcon,
   EcommerceIcon,
   UserProfileIcon,

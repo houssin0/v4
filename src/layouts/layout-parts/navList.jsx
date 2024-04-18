@@ -42,7 +42,7 @@ const index = [{
   }]
 },{
   title: 'Dermatologie Images',
-  Icon: Icons.Image,
+  Icon: Icons.DermatologieIcon,
   children: [{
     name: 'Images',
     path: '/dashboard/image-grid'
@@ -52,7 +52,7 @@ const index = [{
   }]
 },{
   title: 'Dermatologie Diseases',
-  Icon: Icons.Image,
+  Icon: Icons.CoronavirusIcon,
   children: [{
     name: 'Diseases',
     path: '/dashboard/disease-grid'
@@ -167,11 +167,11 @@ const index = [{
   title: "Profiles",
   Icon: Icons.UserProfileIcon,
   children: [{
+  //   name: "Profile",
+  //   path: "/dashboard/profile"
+  // }, {
     name: "Profile",
     path: "/dashboard/profile"
-  }, {
-    name: "Profile V2",
-    path: "/dashboard/profile-v2"
   }]
 }, {
   title: "Projects",

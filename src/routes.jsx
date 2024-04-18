@@ -22,7 +22,7 @@ const JobManagement = Loadable(lazy(() => import("./pages/dashboards/job-managem
 const LearningManagement = Loadable(lazy(() => import("./pages/dashboards/learning-management"))); // account
 
 const Account = Loadable(lazy(() => import("./pages/accounts/account")));
-const AccountV2 = Loadable(lazy(() => import("./pages/accounts/account-v2"))); // user and contact
+// const AccountV2 = Loadable(lazy(() => import("./pages/accounts/account-v2"))); // user and contact
 
 const AddUser = Loadable(lazy(() => import("./pages/user-list/add-new-user")));
 const UserList = Loadable(lazy(() => import("./pages/user-list/user-list-view")));
@@ -32,7 +32,7 @@ const UserGridV2 = Loadable(lazy(() => import("./pages/user-list/user-grid-view-
 const ContactList = Loadable(lazy(() => import("./pages/contact-list/contact-list-view")));
 const ContactGrid = Loadable(lazy(() => import("./pages/contact-list/contact-grid-view"))); // profile
 
-const Profile = Loadable(lazy(() => import("./pages/profiles/profile")));
+// const Profile = Loadable(lazy(() => import("./pages/profiles/profile")));
 const ProfileV2 = Loadable(lazy(() => import("./pages/profiles/profile-v2"))); // profile
 
 const DataTableV2 = Loadable(lazy(() => import("./pages/data-table/data-table-v2"))); // invoice
@@ -196,15 +196,15 @@ const routes = [
       path: "account",
       element: <Account />
     }, {
-      path: "account-v2",
-      element: <AccountV2 />
-    }, {
+    //   path: "account-v2",
+    //   element: <AccountV2 />
+    // }, {
       path: "profile",
-      element: <Profile />
-    }, {
-      path: "profile-v2",
       element: <ProfileV2 />
     }, {
+    //   path: "profile-v2",
+    //   element: <ProfileV2 />
+    // }, {
       path: "data-table-v2",
       element: <DataTableV2 />
     }, {

@@ -28,6 +28,7 @@ import LayerGroup from "./LayerGroup";
 import Image from "icons/Image";
 import FileCircleQuestion from "./FileCircleQuestion";
 import UserList from "./UserList";
+import CoronavirusIcon from '@mui/icons-material/Coronavirus';
 
 const Icons = {
   AdminEcommerce,
@@ -35,6 +36,7 @@ const Icons = {
   CommentsQuestionCheck,
   Dashboard,
   DiagramProject,
+  CoronavirusIcon,
   Ecommerce,
   ElementHub,
   FileCircleQuestion,

@@ -44,11 +44,13 @@ export const navigations = [{
   name: 'Profiles',
   icon: duotone.UserProfile,
   children: [{
-    name: 'Profile 1',
-    path: '/dashboard/profile'
-  }, {
-    name: 'Profile 2',
-    path: '/dashboard/profile-v2'
+  //   name: 'Profile 1',
+  //   path: '/dashboard/profile'
+  // }, {
+    name: 'Profile',
+    path: '/dashboard/profile'},{
+    name: 'Settings',
+    path: '/dashboard/account'
   }]
 },{
   name: 'Dermatologie Images',
@@ -62,7 +64,7 @@ export const navigations = [{
   }]
 },{
   name: 'Dermatologie Diseases',
-  icon: duotone.Image,
+  icon: duotone.CoronavirusIcon,
   children: [{
     name: 'Diseases',
     path: '/dashboard/disease-grid'
@@ -71,16 +73,15 @@ export const navigations = [{
     path: '/dashboard/add-disease'
   }]
 }, {
-  name: 'Accounts',
-  icon: duotone.Accounts,
-  children: [{
-    name: 'Account 1',
-    path: '/dashboard/account'
-  }, {
-    name: 'Account 2',
-    path: '/dashboard/account-v2'
-  }]
-}, {
+//   name: 'Accounts',
+//   icon: duotone.Accounts,
+//   children: [{
+    
+//   // }, {
+//   //   name: 'Account 2',
+//   //   path: '/dashboard/account-v2'
+//   }]
+// }, {
   name: 'User & Contact',
   icon: duotone.UserList,
   children: [{
